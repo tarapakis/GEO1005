@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/ainimal_escape" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
