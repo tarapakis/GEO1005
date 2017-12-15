@@ -2,7 +2,11 @@
 
 # Resource object code
 #
+<<<<<<< HEAD
+# Created: Tue 12. Dec 06:13:06 2017
+=======
 # Created: 周二 12月 5 16:10:26 2017
+>>>>>>> da85784043405c1aa11bfcd9eea2179ff5057b7d
 #      by: The Resource Compiler for PyQt (Qt v4.8.5)
 #
 # WARNING! All changes made in this file will be lost!
