@@ -20,6 +20,7 @@
  *                                                                         *
  ***************************************************************************/
 """
+
 from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, Qt
 from PyQt4.QtGui import QAction, QIcon
 # Initialize Qt resources from file resources.py
@@ -28,6 +29,9 @@ import resources
 # Import the code for the DockWidget
 from escapers_dockwidget import escapersDockWidget
 import os.path
+
+
+
 
 
 class escapers:
@@ -46,6 +50,11 @@ class escapers:
 
         # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
+
+
+
+
+
 
         # initialize locale
         locale = QSettings().value('locale/userLocale')[0:2]
@@ -221,7 +230,7 @@ class escapers:
             #    removed on close (see self.onClosePlugin method)
             if self.dockwidget == None:
                 # Create the dockwidget (after translation) and keep reference
-                self.dockwidget = escapersDockWidget()
+                self.dockwidget = escapersDockWidget(self.iface)
 
             # connect to provide cleanup on closing of dockwidget
             self.dockwidget.closingPlugin.connect(self.onClosePlugin)
@@ -230,4 +239,5 @@ class escapers:
             # TODO: fix to allow choice of dock location
             self.iface.addDockWidget(Qt.RightDockWidgetArea, self.dockwidget)
             self.dockwidget.show()
+
 
