@@ -30,8 +30,8 @@
       <file leaf-file-name="escapers_dockwidget.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/escapers_dockwidget.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="185">
-              <caret line="161" column="91" lean-forward="true" selection-start-line="161" selection-start-column="91" selection-end-line="161" selection-end-column="91" />
+            <state relative-caret-position="177">
+              <caret line="158" column="39" lean-forward="true" selection-start-line="158" selection-start-column="39" selection-end-line="158" selection-end-column="39" />
               <folding>
                 <element signature="e#1142#1151#0" expanded="true" />
               </folding>
@@ -74,7 +74,7 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="3" />
+    <option name="x" value="9" />
     <option name="y" value="5" />
     <option name="width" value="1364" />
     <option name="height" value="730" />
@@ -320,7 +320,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="3" y="5" width="1364" height="730" extended-state="0" />
+    <frame x="9" y="5" width="1364" height="730" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23961425" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -429,8 +429,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/escapers_dockwidget.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="161" column="91" lean-forward="true" selection-start-line="161" selection-start-column="91" selection-end-line="161" selection-end-column="91" />
+        <state relative-caret-position="177">
+          <caret line="158" column="39" lean-forward="true" selection-start-line="158" selection-start-column="39" selection-end-line="158" selection-end-column="39" />
           <folding>
             <element signature="e#1142#1151#0" expanded="true" />
           </folding>

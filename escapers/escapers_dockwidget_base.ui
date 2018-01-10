@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>escapersDockWidgetBase</class>
- <widget class="QDockWidget" name="escapersDockWidgetBase">
+ <class>addpointbutton</class>
+ <widget class="QDockWidget" name="addpointbutton">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -315,6 +315,19 @@
       <width>61</width>
       <height>20</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addpointbutton_2">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>160</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>addpoint</string>
     </property>
    </widget>
   </widget>

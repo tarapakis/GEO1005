@@ -156,8 +156,6 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
             return 0
     def calculateBuffer(self):
         distance = self.getBufferCutoff()
-        #layer = self.iface.activeLayer()
-        #if not layer:
         layer = self.getSelectedLayer()
         processing.runandload("qgis:fixeddistancebuffer", layer, distance, 35, False, None)
 
