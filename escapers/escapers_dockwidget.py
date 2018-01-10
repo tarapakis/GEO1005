@@ -34,7 +34,7 @@ from matplotlib.figure import Figure
 import resources
 
 from PyQt4 import QtGui,QtCore, uic
-from PyQt4.QtCore import pyqtSignal
+from PyQt4.QtCore import pyqtSignal,QVariant
 from qgis.core import *
 from qgis.networkanalysis import *
 from qgis.gui import *
@@ -86,6 +86,8 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.addpointbutton.clicked.connect(self.addPoint)
         self.intersectionbutton.clicked.connect(self.intersection)
 
+        self.emitPoint = QgsMapToolEmitPoint(self.canvas)
+        self.emitPoint.canvasClicked.connect(self.getPoint)
 
 
         #self.updateLayers()
@@ -128,9 +130,6 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
 
     def setSelectedLayer(self):
-        '''layer_name = self.selectLayerCombo.currentText()
-        layer = uf.getLegendLayerByName(self.iface, layer_name)
-        self.updateAttributes(layer)'''
         pass
 
     def getSelectedLayer(self):
@@ -181,7 +180,38 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         processing.runandload('qgis:intersection',layer1, layer2, None, 'memory:output')
 
     def addPoint(self):
-        pass
+        place = uf.getLegendLayerByName(self.iface, 'escape place')
+        if not place:
+            attribs = ["id"]#[a,b,c]
+            types = [QVariant.String]#[a,b,c]
+
+            place = QgsVectorLayer('Point?crs=epsg:28992', 'place', 'memory')
+            uf.addFields(place, ['id'], [QVariant.String])
+            uf.loadTempLayer(place)
+            place.setLayerName('escape place')
+
+        place.startEditing()
+        self.userTool = self.canvas.mapTool()
+        self.canvas.setMapTool(self.emitPoint)
+        self.refreshCanvas(place)
+
+    def getPoint(self,mapPoint,):
+        self.canvas.unsetMapTool(self.emitPoint)
+        self.canvas.setMapTool(self.userTool)
+        place = uf.getLegendLayerByName(self.iface, 'escape place')#get layer named"escape place"
+        if mapPoint:
+            pr = place.dataProvider()
+            feature = QgsFeature()
+            feature.setGeometry(QgsGeometry.fromPoint(mapPoint))
+            pr.addFeatures([feature])
+            place.commitChanges()
+
+    def refreshCanvas(self, layer):
+        # refresh canvas after changes
+        if self.canvas.isCachingEnabled():
+            layer.setCacheImage(None)
+        else:
+            self.canvas.refresh()
 
 
 
