@@ -41,6 +41,9 @@ from qgis.gui import *
 import processing
 from . import utility_functions as uf
 
+from qgis.core import QgsVectorLayer, QgsField, QgsMapLayerRegistry, QgsFeature, QgsGeometry
+
+
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'escapers_dockwidget_base.ui'))
@@ -94,7 +97,7 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def OpenScenario(self, filename=""):
         scenario_open = False
-        scenario_file = os.path.join(u'/Users/jorge/github/GEO1005', 'sample_data', 'time_test.qgs')
+        scenario_file = os.path.join(u'/Users/tengw/github/GEO1005', 'sample_data', 'time_test.qgs')
             # check if file exists
         if os.path.isfile(scenario_file):
             self.iface.addProject(scenario_file)
@@ -152,34 +155,11 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         else:
             return 0
     def calculateBuffer(self):
-        origins = self.getSelectedLayer().selectedFeatures()
+        distance = self.getBufferCutoff()
+        #layer = self.iface.activeLayer()
+        #if not layer:
         layer = self.getSelectedLayer()
-        if origins > 0:
-            cutoff_distance = self.getBufferCutoff()
-            buffers = {}
-            for point in origins:
-                geom = point.geometry()
-                buffers[point.id()] = geom.buffer(cutoff_distance,12).asPolygon()
-            # store the buffer results in temporary layer called "Buffers"
-            buffer_layer = uf.getLegendLayerByName(self.iface, "Buffers")
-            # create one if it doesn't exist
-            if not buffer_layer:
-                attribs = ['id', 'distance']
-                types = [QtCore.QVariant.String, QtCore.QVariant.Double]
-                buffer_layer = uf.createTempLayer('Buffers','POLYGON',layer.crs().postgisSrid(), attribs, types)
-                uf.loadTempLayer(buffer_layer)
-                buffer_layer.setLayerName('Buffers')
-            # insert buffer polygons
-            geoms = []
-            values = []
-            for buffer in buffers.iteritems():
-                # each buffer has an id and a geometry
-                geoms.append(buffer[1])
-                # in the case of values, it expects a list of multiple values in each item - list of lists
-                values.append([buffer[0],cutoff_distance])
-            uf.insertTempFeatures(buffer_layer, geoms, values)
-            self.refreshCanvas(buffer_layer)
-
+        processing.runandload("qgis:fixeddistancebuffer", layer, distance, 35, False, None)
 
     def refreshCanvas(self, layer):
         if self.canvas.isCachingEnabled():
