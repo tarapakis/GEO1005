@@ -39,6 +39,7 @@ from qgis.core import *
 from qgis.networkanalysis import *
 from qgis.gui import *
 import processing
+import qgis
 from . import utility_functions as uf
 
 from qgis.core import QgsVectorLayer, QgsField, QgsMapLayerRegistry, QgsFeature, QgsGeometry
@@ -54,6 +55,7 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
 class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     closingPlugin = pyqtSignal()
+    flag = 0
 
     def __init__(self,iface, parent=None):
         """Constructor."""
@@ -81,6 +83,8 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.selectAttributeCombo.activated.connect(self.setSelectedAttribute)
 
         self.bufferButton.clicked.connect(self.calculateBuffer)
+        self.addpointbutton.clicked.connect(self.addPoint)
+        self.intersectionbutton.clicked.connect(self.intersection)
 
 
 
@@ -165,6 +169,19 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         else:
             self.canvas.refresh()
 
+    def getlayer1(self):
+        layer1 = self.layer1Edit.text()
+        return  layer1
+    def getlayer2(self):
+        layer2 = self.layer2Edit.text()
+        return  layer2
+    def intersection(self):
+        layer1 = self.getlayer1()
+        layer2 = self.getlayer2()
+        processing.runandload('qgis:intersection',layer1, layer2, None, 'memory:output')
+
+    def addPoint(self):
+        pass
 
 
 
