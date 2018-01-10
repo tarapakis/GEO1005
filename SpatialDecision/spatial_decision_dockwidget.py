@@ -376,6 +376,7 @@ class SpatialDecisionDockWidget(QtGui.QDockWidget, FORM_CLASS):
             return uf.convertNumeric(cutoff)
         else:
             return 0
+            
 
     def calculateBuffer(self):
         origins = self.getSelectedLayer().selectedFeatures()

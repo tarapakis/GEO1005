@@ -251,7 +251,7 @@
    <widget class="QPushButton" name="SaveScenarioButton">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>130</x>
       <y>10</y>
       <width>75</width>
       <height>23</height>
