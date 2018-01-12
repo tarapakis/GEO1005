@@ -147,7 +147,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>time(hour)</string>
+       <string>time(min)</string>
       </property>
      </widget>
      <widget class="QLineEdit" name="timeEdit">
