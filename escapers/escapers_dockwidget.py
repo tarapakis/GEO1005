@@ -85,9 +85,13 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.bufferButton.clicked.connect(self.calculateBuffer)
         self.addpointbutton.clicked.connect(self.addPoint)
         self.intersectionbutton.clicked.connect(self.intersection)
+        self.cleanButton.clicked.connect(self.cleanBuffer)
+        self.updatePlaceButton.clicked.connect(self.updatePlace)
+
 
         self.emitPoint = QgsMapToolEmitPoint(self.canvas)
         self.emitPoint.canvasClicked.connect(self.getPoint)
+
 
 
         #self.updateLayers()
@@ -151,14 +155,30 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
 
 # buffer functions
+    def getspeed(self):
+        speed = self.speedEdit.text()
+        if uf.isNumeric(speed):
+            return uf.convertNumeric(speed)
+        else:
+            return 0
+
+    def gettime(self):
+        time = self.timeEdit.text()
+        if uf.isNumeric(time):
+            return uf.convertNumeric(time)
+        else:
+            return 0
+
     def getBufferCutoff(self):
         cutoff = self.bufferCutoffEdit.text()
         if uf.isNumeric(cutoff):
             return uf.convertNumeric(cutoff)
         else:
             return 0
+
     def calculateBuffer(self):
-        distance = self.getBufferCutoff()
+        #distance = self.getBufferCutoff()
+        distance = self.getspeed()* self.gettime()
         layer = self.getSelectedLayer()
         processing.runandload("qgis:fixeddistancebuffer", layer, distance, 35, False, None)
 
@@ -180,10 +200,11 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         processing.runandload('qgis:intersection',layer1, layer2, None, 'memory:output')
 
     def addPoint(self):
+        self.flag = 1
         place = uf.getLegendLayerByName(self.iface, 'escape place')
         if not place:
-            attribs = ["id"]#[a,b,c]
-            types = [QVariant.String]#[a,b,c]
+            attribs = ["id"]    #[a,b,c]
+            types = [QVariant.String]    #[a,b,c]
 
             place = QgsVectorLayer('Point?crs=epsg:28992', 'place', 'memory')
             uf.addFields(place, ['id'], [QVariant.String])
@@ -195,16 +216,20 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.canvas.setMapTool(self.emitPoint)
         self.refreshCanvas(place)
 
-    def getPoint(self,mapPoint,):
+    def getPoint(self,mapPoint):
         self.canvas.unsetMapTool(self.emitPoint)
         self.canvas.setMapTool(self.userTool)
-        place = uf.getLegendLayerByName(self.iface, 'escape place')#get layer named"escape place"
+        if self.flag == 1:
+            place = uf.getLegendLayerByName(self.iface, 'escape place')#get layer named"escape place"
+        else:
+            place = uf.getLegendLayerByName(self.iface, 'new place')
         if mapPoint:
             pr = place.dataProvider()
             feature = QgsFeature()
             feature.setGeometry(QgsGeometry.fromPoint(mapPoint))
             pr.addFeatures([feature])
-            place.commitChanges()
+            place.commitChanges()#savechanges
+
 
     def refreshCanvas(self, layer):
         # refresh canvas after changes
@@ -212,6 +237,28 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
             layer.setCacheImage(None)
         else:
             self.canvas.refresh()
+
+    def cleanBuffer(self):
+        layer = uf.getLegendLayerByName(self.iface, 'Buffer')
+        if layer:
+            QgsMapLayerRegistry.instance().removeMapLayer(layer.id())
+
+    def updatePlace(self):
+        self.flag = 0
+        place = uf.getLegendLayerByName(self.iface, 'new place')
+        if not place:
+            attribs = ["id"]  # [a,b,c]
+            types = [QVariant.String]  # [a,b,c]
+
+            place = QgsVectorLayer('Point?crs=epsg:28992', 'place', 'memory')
+            uf.addFields(place, ['id'], [QVariant.String])
+            uf.loadTempLayer(place)
+            place.setLayerName('new place')
+
+        place.startEditing()
+        self.userTool = self.canvas.mapTool()
+        self.canvas.setMapTool(self.emitPoint)
+        self.refreshCanvas(place)
 
 
 
