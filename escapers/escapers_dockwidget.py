@@ -80,13 +80,14 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
         #Selectlayer
         self.selectLayerCombo.activated.connect(self.setSelectedLayer)
-        self.selectAttributeCombo.activated.connect(self.setSelectedAttribute)
+        #self.selectAttributeCombo.activated.connect(self.setSelectedAttribute)
 
         self.bufferButton.clicked.connect(self.calculateBuffer)
         self.addpointbutton.clicked.connect(self.addPoint)
         self.intersectionbutton.clicked.connect(self.intersection)
         self.cleanButton.clicked.connect(self.cleanBuffer)
         self.updatePlaceButton.clicked.connect(self.updatePlace)
+        self.openTableButton.clicked.connect(self.opentable)
 
 
         self.emitPoint = QgsMapToolEmitPoint(self.canvas)
@@ -260,6 +261,34 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.canvas.setMapTool(self.emitPoint)
         self.refreshCanvas(place)
 
+    def extractAttributeSummary(self):
+        # get summary of the attribute
+        #layer = self.getSelectedLayer()
+        layer = uf.getLegendLayerByName(self.iface, 'animaldt')#get layer named"escape place"
+        summary = []
+        # only use the first attribute in the list
+        for feature in layer.getFeatures():
+            summary.append((feature.attributes()[0], feature.attributes()[2],feature.attributes()[5]))
+        # send this to the table
+        self.clearTable()
+        self.updateTable(summary)
+
+    def updateTable(self, values):
+        # takes a list of label / value pairs, can be tuples or lists. not dictionaries to control order
+        self.statisticsTable.setColumnCount(2)
+        self.statisticsTable.setHorizontalHeaderLabels(["Item", "Value"])
+        self.statisticsTable.setRowCount(len(values))
+        for i, item in enumerate(values):
+            # i is the table row, items must tbe added as QTableWidgetItems
+            self.statisticsTable.setItem(i, 0, QtGui.QTableWidgetItem(unicode(item[0])))
+            self.statisticsTable.setItem(i, 1, QtGui.QTableWidgetItem(unicode(item[1])))
+            self.statisticsTable.setItem(i, 1, QtGui.QTableWidgetItem(unicode(item[2])))
+        self.statisticsTable.horizontalHeader().setResizeMode(0, QtGui.QHeaderView.ResizeToContents)
+        self.statisticsTable.horizontalHeader().setResizeMode(1, QtGui.QHeaderView.Stretch)
+        self.statisticsTable.resizeRowsToContents()
+
+    def clearTable(self):
+        self.statisticsTable.clear()
 
 
 
