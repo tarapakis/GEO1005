@@ -1,37 +1,31 @@
-﻿ANIMAL,SPEED,SPEED,SIZE,WEIGHT,HABITAT,LEVEL OF WARNING,FOOD,Panic behaviour,Habitat area,importance,hours moving,active during,attack,s=80%v * 4 (if panic behaviour is run or flee),10%v * t -  (if active and habitat is savannah or Park)
-Californian sea lion,0.35,21,,110-300,water,1,fish,Idle,,2,,diurnal,,s=50%v * 2 (if panic behaviour is finding nest or hide),5%v * t (if active and habitat is water or polar regions or forest
-King penguin,0.13,8,,15,polar regions,1,fish,Idle,,1,,diurnal,,s=20%v *3 (if panic behaviour is camouflage or Idle),
-American Bison,0.93,56,,800 - 1000,Park,3,Grass,run,,3,,nocturnal,Yes,,
-Artic fox,0.8,48,,"2,5 - 5",polar regions,1,Small animals,hides,,1,,nocturnal,yes,,
-Polar Bear,0.65,40,,400,polar regions,3,Meat,run,,3,,diurnal,Yes,,
-Yellow Anaconda,0.33,20,,40,water,2,Meat,camouflage,,2,,,,,
-Leopard,0.95,58,,60-90,forests,2,Meat,hide,,2,,nocturnal,yes,,
-Asian Elephant,0.65,40,,3000-4000,forests,3,Grass,Idle,,3,,diurnal,,,
-Asian Lion,1.33,80,,150-250,Park,4,Meat,hide,,3,2,nocturnal,yes,,
-Camel,1.10,65,,450-700,Park,2,Trees,Idle,,1,,diurnal,,,
-Indian rhinoceros,0.90,55,,1500-3000,Park,3,Grass,flees,,3,,,yes,,
-Komodo dragon,0.33,20,,135,forests,3,Meat,camouflage,,3,,diurnal,yes,,
-Red panda,0.63,38,,3.0-6,forests,1,Trees,Finding nest,,1,,nocturnal,,,
-Sulawesi crested macaque,0.65,40,,5.5-13,forests,2,Trees,Finding nest,,2,,,,,
-Sumatran tiger,1.60,96,,120-160,forest,4,Meat,hide,,3,,nocturnal,yes,,
-Black rhinoceros,0.90,55,,800-1400,savannah,3,Grass,flees,,3,,nocturnal,yes,,
-Bongo,1.15,70,,250-400,forest,2,Grass,run,,1,,nocturnal,,,
-Zebra,1.05,64,,250,savannah,2,Grass,flees,,1,,diurnal,,,
-Ostrich,1.15,70,,100-150,savannah,2,Grass,flees,,1,,diurnal,yes,,
-Buffalo,1.00,60,,270-320,Park,3,grass,run,,2,,diurnal,yes,,
-Greater Kudu,1.10,65,,200-300,savannah,2,grass,run,,1,,nocturnal,,,
-Mhorr Gazelle,1.50,90,,85,savannah,1,grass,run,,1,,diurnal,,,
-Nile crocodile,0.25,15,,700,water,3,Meat,Idle,,2,,,yes,,
-pygmy hippopotamus,0.50,30,,275,water,2,Trees,Idle,,1,,nocturnal,,,
-Giraffe,0.86,52,,500-1800,savannah,3,Trees,flees,,2,4,diurnal,,,
-Lemur,0.33,20,,3.5,forests ,1,Trees,hides,,1,,nocturnal,,,
-Serval,1.33,80,,7.0 - 14,Park,1,Small animals,hides,,2,,nocturnal,,,
-Hyaena,1.06,64,,60-90,savannah,2,meat,hides,,2,,nocturnal,,,
-Gorilla,0.65,40,,90-200,forests,4,Trees,flees,,3,,diurnal,yes,,
-Reindeer,0.85,51,,60-315,Park,2,Trees,run,,1,,diurnal,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,
+ANIMAL	SPEED	SPEED	SIZE	WEIGHT	HABITAT	LEVEL OF WARNING	FOOD	Panic behaviour	Habitat area	importance	hours moving	active during	attack	s=80%v * 4 (if panic behaviour is run or flee)	10%v * t -  (if active and habitat is savannah or Park)
+Californian sea lion	0.35	21		110-300	water	1	fish	Idle		2		diurnal		s=50%v * 2 (if panic behaviour is finding nest or hide)	5%v * t (if active and habitat is water or polar regions or forest
+King penguin	0.13	8		15	polar regions	1	fish	Idle		1		diurnal		s=20%v *3 (if panic behaviour is camouflage or Idle)	
+American Bison	0.93	56		800 - 1000	Park	3	Grass	run		3		nocturnal	Yes		
+Artic fox	0.8	48		"2,5 - 5"	polar regions	1	Small animals	hides		1		nocturnal	yes		
+Polar Bear	0.65	40		400	polar regions	3	Meat	run		3		diurnal	Yes		
+Yellow Anaconda	0.33	20		40	water	2	Meat	camouflage		2					
+Leopard	0.95	58		60-90	forests	2	Meat	hide		2		nocturnal	yes		
+Asian Elephant	0.65	40		3000-4000	forests	3	Grass	Idle		3		diurnal			
+Asian Lion	1.33	80		150-250	Park	4	Meat	hide		3	2	nocturnal	yes		
+Camel	1.1	65		450-700	Park	2	Trees	Idle		1		diurnal			
+Indian rhinoceros	0.9	55		1500-3000	Park	3	Grass	flees		3			yes		
+Komodo dragon	0.33	20		135	forests	3	Meat	camouflage		3		diurnal	yes		
+Red panda	0.63	38		3.0-6	forests	1	Trees	Finding nest		1		nocturnal			
+Sulawesi crested macaque	0.65	40		5.5-13	forests	2	Trees	Finding nest		2					
+Sumatran tiger	1.6	96		120-160	forest	4	Meat	hide		3		nocturnal	yes		
+Black rhinoceros	0.9	55		800-1400	savannah	3	Grass	flees		3		nocturnal	yes		
+Bongo	1.15	70		250-400	forest	2	Grass	run		1		nocturnal			
+Zebra	1.05	64		250	savannah	2	Grass	flees		1		diurnal			
+Ostrich	1.15	70		100-150	savannah	2	Grass	flees		1		diurnal	yes		
+Buffalo	1	60		270-320	Park	3	grass	run		2		diurnal	yes		
+Greater Kudu	1.1	65		200-300	savannah	2	grass	run		1		nocturnal			
+Mhorr Gazelle	1.5	90		85	savannah	1	grass	run		1		diurnal			
+Nile crocodile	0.25	15		700	water	3	Meat	Idle		2			yes		
+pygmy hippopotamus	0.5	30		275	water	2	Trees	Idle		1		nocturnal			
+Giraffe	0.86	52		500-1800	savannah	3	Trees	flees		2	4	diurnal			
+Lemur	0.33	20		3.5	forests 	1	Trees	hides		1		nocturnal			
+Serval	1.33	80		7.0 - 14	Park	1	Small animals	hides		2		nocturnal			
+Hyaena	1.06	64		60-90	savannah	2	meat	hides		2		nocturnal			
+Gorilla	0.65	40		90-200	forests	4	Trees	flees		3		diurnal	yes		
+Reindeer	0.85	51		60-315	Park	2	Trees	run		1		diurnal			
