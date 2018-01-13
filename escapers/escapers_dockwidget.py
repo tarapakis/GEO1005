@@ -134,12 +134,12 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def updateLayers(self):
         if uf.getLegendLayers(self.iface, 'all', 'all'):
             layers = uf.getLegendLayers(self.iface, 'all', 'all')
-        self.selectLayerCombo.clear()
-        self.extractAttributeSummary()
-        if layers:
-            layer_names = uf.getLayersListNames(layers)
-            self.selectLayerCombo.addItems(layer_names)
-            self.setSelectedLayer()
+            self.selectLayerCombo.clear()
+            self.extractAttributeSummary()
+            if layers:
+                layer_names = uf.getLayersListNames(layers)
+                self.selectLayerCombo.addItems(layer_names)
+                self.setSelectedLayer()
 
 
 
@@ -304,14 +304,17 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def extractAttributeSummary(self):
         # get summary of the attribute
         #layer = self.getSelectedLayer()
+
+
         layer = uf.getLegendLayerByName(self.iface, 'animaldt')#get layer named"escape place"
-        summary = []
-        # only use the first attribute in the list
-        for feature in layer.getFeatures():
-            summary.append([feature.attributes()[0], feature.attributes()[1],feature.attributes()[5]])
-        # send this to the table
-        self.clearTable()
-        self.updateTable(summary)
+        if layer:
+            summary = []
+            # only use the first attribute in the list
+            for feature in layer.getFeatures():
+                summary.append([feature.attributes()[0], feature.attributes()[1],feature.attributes()[5]])
+            # send this to the table
+            self.clearTable()
+            self.updateTable(summary)
 
     def updateTable(self, values):
         # takes a list of label / value pairs, can be tuples or lists. not dictionaries to control order
