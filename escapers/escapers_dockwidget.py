@@ -75,8 +75,8 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.iface.legendInterface().itemRemoved.connect(self.updateLayers)
         self.iface.legendInterface().itemAdded.connect(self.updateLayers)
 
-        self.OpenScenarioButton.clicked.connect(self.OpenScenario)
-        self.SaveScenarioButton.clicked.connect(self.SaveScenario)
+        #self.OpenScenarioButton.clicked.connect(self.OpenScenario)
+        #self.SaveScenarioButton.clicked.connect(self.SaveScenario)
 
         #Selectlayer
         self.selectLayerCombo.activated.connect(self.setSelectedLayer)
@@ -87,15 +87,21 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.intersectionbutton.clicked.connect(self.intersection)
         self.cleanButton.clicked.connect(self.cleanBuffer)
         self.updatePlaceButton.clicked.connect(self.updatePlace)
-        self.openTableButton.clicked.connect(self.extractAttributeSummary)
+        #self.openTableButton.clicked.connect(self.extractAttributeSummary)
+        self.selectAnimalButton.clicked.connect(self.selectAnimal)
+
+        self.saveMapButton.clicked.connect(self.saveMap)
+        self.saveMapPathButton.clicked.connect(self.selectFile)
+
+        self.reportButton.clicked.connect(self.report)
 
 
         self.emitPoint = QgsMapToolEmitPoint(self.canvas)
         self.emitPoint.canvasClicked.connect(self.getPoint)
 
+        self.extractAttributeSummary()
+        self.updateLayers()
 
-
-        #self.updateLayers()
 
     def closeEvent(self, event):
         self.closingPlugin.emit()
@@ -108,7 +114,7 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
 
     def OpenScenario(self, filename=""):
         scenario_open = False
-        scenario_file = os.path.join(u'/Users/tengw/github/GEO1005', 'sample_data', 'time_test.qgs')
+        scenario_file = os.path.join(u'/Users/tengw/Document/GitHub/GEO1005 DATA', 'SDSS data project.qgs')
             # check if file exists
         if os.path.isfile(scenario_file):
             self.iface.addProject(scenario_file)
@@ -126,12 +132,16 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.iface.actionSaveProject()
 
     def updateLayers(self):
-        layers = uf.getLegendLayers(self.iface, 'all', 'all')
+        if uf.getLegendLayers(self.iface, 'all', 'all'):
+            layers = uf.getLegendLayers(self.iface, 'all', 'all')
         self.selectLayerCombo.clear()
+        self.extractAttributeSummary()
         if layers:
             layer_names = uf.getLayersListNames(layers)
             self.selectLayerCombo.addItems(layer_names)
             self.setSelectedLayer()
+
+
 
 
     def setSelectedLayer(self):
@@ -180,8 +190,14 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def calculateBuffer(self):
         #distance = self.getBufferCutoff()
         distance = self.getspeed()* self.gettime()
-        layer = self.getSelectedLayer()
+        #layer = self.getSelectedLayer()
+        layer_name = self.selectLayerCombo.currentText()
+        if layer_name == 'esc place':
+            layer = uf.getLegendLayerByName(self.iface, layer_name)
+        else:
+            layer = uf.getLegendLayerByName(self.iface, 'new place')
         processing.runandload("qgis:fixeddistancebuffer", layer, distance, 35, False, None)
+
 
     def refreshCanvas(self, layer):
         if self.canvas.isCachingEnabled():
@@ -195,23 +211,53 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def getlayer2(self):
         layer2 = self.layer2Edit.text()
         return  layer2
+
+    #possible location
     def intersection(self):
-        layer1 = self.getlayer1()
-        layer2 = self.getlayer2()
-        processing.runandload('qgis:intersection',layer1, layer2, None, 'memory:output')
+        self.cleanBuffer()
+        self.cleanIntersection()
+        self.calculateBuffer()
+        layer1 = self.HabitatEdit.text()
+        '''if layer1 == 'water':
+            layer1 = 'water'
+        elif layer1 == 'savannah'or'polar regions':
+            layer1 = 'roads'
+        elif layer1 == 'Park'or 'forests':
+            layer1 = 'Trees'''
+        layer2 = 'Buffer'
+        processing.runandload('qgis:intersection',layer1, layer2, None, 'ps_location')
+
+    #new place
+    def updatePlace(self):
+        self.flag = 0
+        place = uf.getLegendLayerByName(self.iface, 'new place')
+        if not place:
+            #attribs = ["id"]  # [a,b,c]
+            #types = [QVariant.String]  # [a,b,c]
+            layer = uf.getLegendLayerByName(self.iface, 'new place')
+        #if layer:
+            #QgsMapLayerRegistry.instance().removeMapLayer(layer.id())
+
+            place = QgsVectorLayer('Point?crs=epsg:28992', 'new place', 'memory')
+            uf.addFields(place, ['id'], [QVariant.String])
+            uf.loadTempLayer(place)
+            place.setLayerName('new place')
+        place.startEditing()
+        self.userTool = self.canvas.mapTool()
+        self.canvas.setMapTool(self.emitPoint)
+        self.refreshCanvas(place)
 
     def addPoint(self):
         self.flag = 1
-        place = uf.getLegendLayerByName(self.iface, 'escape place')
+        place = uf.getLegendLayerByName(self.iface, 'esc place')
         if not place:
-            attribs = ["id"]    #[a,b,c]
-            types = [QVariant.String]    #[a,b,c]
+            #attribs = ["id"]    #[a,b,c]
+            #types = [QVariant.String]    #[a,b,c]
 
-            place = QgsVectorLayer('Point?crs=epsg:28992', 'place', 'memory')
+            place = QgsVectorLayer('Point?crs=epsg:28992', 'esc place', 'memory')
             uf.addFields(place, ['id'], [QVariant.String])
             uf.loadTempLayer(place)
-            place.setLayerName('escape place')
-
+            place.setLayerName('esc place')
         place.startEditing()
         self.userTool = self.canvas.mapTool()
         self.canvas.setMapTool(self.emitPoint)
@@ -221,7 +267,7 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         self.canvas.unsetMapTool(self.emitPoint)
         self.canvas.setMapTool(self.userTool)
         if self.flag == 1:
-            place = uf.getLegendLayerByName(self.iface, 'escape place')#get layer named"escape place"
+            place = uf.getLegendLayerByName(self.iface, 'esc place')#get layer named"escape place"
         else:
             place = uf.getLegendLayerByName(self.iface, 'new place')
         if mapPoint:
@@ -243,23 +289,17 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
         layer = uf.getLegendLayerByName(self.iface, 'Buffer')
         if layer:
             QgsMapLayerRegistry.instance().removeMapLayer(layer.id())
+            self.cleanBuffer()
+        self.cleanIntersection()
 
-    def updatePlace(self):
-        self.flag = 0
-        place = uf.getLegendLayerByName(self.iface, 'new place')
-        if not place:
-            attribs = ["id"]  # [a,b,c]
-            types = [QVariant.String]  # [a,b,c]
+    def cleanIntersection(self):
+        layer = uf.getLegendLayerByName(self.iface, 'Intersection')
+        if layer:
+            QgsMapLayerRegistry.instance().removeMapLayer(layer.id())
+            self.cleanIntersection()
 
-            place = QgsVectorLayer('Point?crs=epsg:28992', 'place', 'memory')
-            uf.addFields(place, ['id'], [QVariant.String])
-            uf.loadTempLayer(place)
-            place.setLayerName('new place')
 
-        place.startEditing()
-        self.userTool = self.canvas.mapTool()
-        self.canvas.setMapTool(self.emitPoint)
-        self.refreshCanvas(place)
+
 
     def extractAttributeSummary(self):
         # get summary of the attribute
@@ -290,7 +330,42 @@ class escapersDockWidget(QtGui.QDockWidget, FORM_CLASS):
     def clearTable(self):
         self.statisticsTable.clear()
 
+    def selectAnimal(self):
+        items = self.statisticsTable.selectedItems()
+        speed =  items[1].text()
+        habitat = items[2].text()
+        self.speedEdit.setText(speed)
+        self.HabitatEdit.setText(habitat)
+
+    def selectFile(self):
+        last_dir = uf.getLastDir("SDSS")
+        path = QtGui.QFileDialog.getSaveFileName(self, "Save map file", last_dir, "PNG (*.png)")
+        if path.strip() != "":
+            path = unicode(path)
+            uf.setLastDir(path, "SDSS")
+            self.saveMapPathEdit.setText(path)
+
+    def saveMap(self):
+        filename = self.saveMapPathEdit.text()
+        if filename != '':
+            self.canvas.saveAsImage(filename,None,"PNG")
 
 
+    #　report
+    def updateReport(self, report):
+        self.reportList.clear()
+        self.reportList.addItems(report)
+
+    def insertReport(self, item):
+        self.reportList.insertItem(0, item)
+
+    def clearReport(self):
+        self.reportList.clear()
+
+    def report(self):
+        test = 'this is a test report'
+        self.reportList.clear()
+        #self.reportList.addItems(test)
+        self.insertReport(test)
 
 
